@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5f8fc">
+<title>ResolveAI|Smart Complaint Management</title>
+<style>
+:root{
+ --ink:#172b3a;--muted:#687b8b;--line:#e2eaf0;--bg:#f4f7fb;--white:#fff;
+ --navy:#15344d;--blue:#286fba;--blue2:#eaf3fc;--teal:#12816f;--tealbg:#e8f7f2;
+ --red:#c43d4b;--redbg:#fff0f1;--amber:#a86a10;--amberbg:#fff6e6;--purple:#7656b5;--purplebg:#f2edfc;
+ --shadow:0 12px 34px rgba(25,55,78,.07);--radius:18px
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+.topline{height:5px;background:linear-gradient(90deg,#286fba,#16a085,#7b68b4)}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.nav{max-width:1240px;margin:auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;color:var(--navy);font-size:19px;letter-spacing:-.5px}
+.logo{width:43px;height:43px;border-radius:14px;background:linear-gradient(145deg,#e6f2ff,#e4f7f1);display:grid;place-items:center;font-size:23px}
+.brand small{display:block;font-size:10px;color:var(--muted);letter-spacing:1.1px;font-weight:800}
+.navlinks{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.navlinks button{border:0;background:transparent;color:#506577;padding:10px 13px;border-radius:10px;font-weight:700;font-size:13px}
+.navlinks button:hover,.navlinks button.active{background:var(--blue2);color:var(--blue)}
+.container{max-width:1240px;margin:auto;padding:28px 24px 48px}
+.hero{background:linear-gradient(115deg,#14334d,#1b5871 65%,#16816f);color:white;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:430px;height:430px;border:1px solid #ffffff25;border-radius:50%;right:-90px;top:-170px;box-shadow:0 0 0 45px #ffffff0b,0 0 0 90px #ffffff08}
+.hero-inner{max-width:1240px;margin:auto;padding:65px 24px 78px;position:relative;z-index:1}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid #ffffff38;background:#ffffff12;border-radius:30px;padding:7px 12px;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;font-weight:800;color:#c8f5e8}
+.hero h1{font-size:clamp(34px,5vw,57px);line-height:1.08;letter-spacing:-1.8px;max-width:720px;margin:18px 0}
+.hero p{max-width:660px;color:#e2eff4;font-size:16px;line-height:1.8;margin:0}
+.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:25px}
+.btn{border:0;border-radius:11px;padding:11px 16px;font-weight:750;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+.primary{background:var(--blue);color:#fff}.success{background:var(--teal);color:#fff}.soft{background:var(--blue2);color:#205d91}.outline{background:#fff;color:var(--navy);border:1px solid var(--line)}.danger{background:var(--redbg);color:var(--red)}
+.hero .primary{background:white;color:var(--navy)}.hero .outline{background:#ffffff12;color:white;border-color:#ffffff55}
+.page{display:none}.page.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:-27px;position:relative;z-index:2}
+.stat,.panel,.feature,.metric{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stat{padding:18px 20px}.stat small{color:var(--muted);font-weight:700}.stat strong{display:block;font-size:29px;color:var(--navy);letter-spacing:-1px;margin-top:4px}
+.stat .icon{float:right;font-size:20px;background:#f0f6fb;padding:8px;border-radius:11px}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:34px 0 17px}
+.section-head h2{font-size:25px;color:var(--navy);letter-spacing:-.7px;margin:0}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.feature{padding:22px}.feature .emoji{font-size:24px;width:48px;height:48px;border-radius:14px;background:#edf5fb;display:grid;place-items:center}
+.feature h3{color:var(--navy);font-size:16px;margin:13px 0 5px}.feature p{color:var(--muted);font-size:13px;margin:0;line-height:1.7}
+.panel{padding:24px;margin:18px 0}.panel h3{color:var(--navy);margin:0 0 7px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
+label{font-size:12px;font-weight:800;color:#344d60}
+input,select,textarea{width:100%;border:1px solid #d4e0e8;border-radius:10px;background:#fff;color:var(--ink);padding:12px 13px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#6ba1ce;box-shadow:0 0 0 3px #286fba18}
+textarea{min-height:112px;resize:vertical;line-height:1.6}
+.hint{font-size:11px;color:var(--muted)}.notice{background:#eff7ff;border:1px solid #d9eaf8;color:#315c7b;border-radius:12px;padding:13px 15px;font-size:12px;margin:12px 0}
+.ai-card{border:1px solid #d8e8f5;background:linear-gradient(120deg,#f2f8ff,#f0faf7);padding:17px;border-radius:14px;margin:16px 0}
+.ai-head{display:flex;align-items:center;gap:9px;font-weight:850;color:#245a7c}.ai-chip{font-size:10px;background:#e2f1ff;color:#23649b;border-radius:30px;padding:5px 9px;font-weight:850;letter-spacing:.4px}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.ai-value{background:#fff;border:1px solid #e1ebf1;border-radius:10px;padding:11px}.ai-value small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;font-weight:800;letter-spacing:.6px}.ai-value b{display:block;color:var(--navy);margin-top:3px;font-size:13px}
+.upload{border:1.5px dashed #a9c4d8;background:#f7fbff;border-radius:12px;padding:14px}
+.preview{max-width:260px;max-height:170px;object-fit:contain;border-radius:10px;margin-top:10px;display:block}
+.hidden{display:none!important}
+.pill{display:inline-flex;align-items:center;border-radius:30px;padding:5px 10px;font-size:11px;font-weight:850;background:#edf2f6;color:#526575;white-space:nowrap}
+.Pending{background:var(--amberbg);color:var(--amber)}.InProgress{background:var(--blue2);color:var(--blue)}.Resolved{background:var(--tealbg);color:var(--teal)}.Rejected{background:var(--redbg);color:var(--red)}
+.Critical{background:var(--redbg);color:var(--red)}.High{background:#fff0e7;color:#b45b22}.Medium{background:var(--amberbg);color:var(--amber)}.Low{background:var(--tealbg);color:var(--teal)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.toolbar input{flex:1;min-width:180px}.toolbar select{width:auto;min-width:145px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:880px}th,td{text-align:left;padding:13px 12px;border-bottom:1px solid var(--line);font-size:12px;vertical-align:middle}
+th{background:#f4f8fb;color:#607485;font-size:10px;text-transform:uppercase;letter-spacing:.7px}tbody tr:hover{background:#fafcfe}
+.result{border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:13px;background:#fff}
+.timeline{display:flex;flex-direction:column;gap:12px;margin:14px 0}.event{display:grid;grid-template-columns:18px 1fr;gap:10px}.dot{width:10px;height:10px;border-radius:50%;background:var(--teal);margin:6px 0 0 3px;box-shadow:0 0 0 4px #e4f5ef}.event p{margin:0;font-size:12px}.event small{color:var(--muted)}
+.gps-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.gps-status{font-size:11px;color:var(--muted)}
+.admin-detail{margin-top:18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#fbfdff}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.detail-meta{padding:13px;background:#fff;border:1px solid var(--line);border-radius:11px;font-size:12px;margin:8px 0}.detail-meta b{color:var(--navy)}
+.admin-photo{width:100%;max-height:320px;object-fit:contain;border:1px solid var(--line);border-radius:12px;background:#f2f5f8}
+.empty{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+.toast{position:fixed;right:20px;bottom:20px;background:#153b53;color:white;padding:13px 17px;border-radius:12px;box-shadow:var(--shadow);z-index:50;display:none;max-width:min(390px,calc(100vw - 40px));font-size:13px}
+.footer{background:#102b42;color:#dceaf2;margin-top:50px}.footer-inner{max-width:1240px;margin:auto;padding:28px 24px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.footer small{color:#aac0cf}
+.modalback{position:fixed;inset:0;background:#102b42a8;display:grid;place-items:center;padding:18px;z-index:40}.modal{background:white;border-radius:17px;padding:24px;max-width:430px;width:100%}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{padding:15px}.metric small{color:var(--muted);font-size:11px}.metric b{display:block;color:var(--navy);font-size:22px;margin-top:3px}
+.note-box{background:#f5f8fb;border-radius:10px;padding:12px;font-size:12px;color:#526879}
+@media(max-width:780px){.nav{align-items:flex-start;flex-direction:column;padding:12px 16px}.navlinks{width:100%}.navlinks button{padding:8px 9px;font-size:12px}.container{padding:22px 16px 38px}.hero-inner{padding:48px 18px 65px}.hero h1{font-size:38px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:14px}.stat strong{font-size:24px}.grid3{grid-template-columns:1fr}.form-grid,.detail-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.ai-grid{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column}.panel{padding:18px}.kpi-row{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+<header><nav class="nav">
+ <div class="brand"><div class="logo">🤖</div><div>ResolveAI<small>SMART COMPLAINT MANAGEMENT</small></div></div>
+ <div class="navlinks">
+  <button class="active" data-page="home">Overview</button><button data-page="submit">Submit Complaint</button><button data-page="track">Track Status</button><button data-page="admin">Officer Dashboard</button>
+ </div>
+</nav></header>
+<main>
+<section id="home" class="page active">
+ <div class="hero"><div class="hero-inner">
+  <span class="eyebrow"> Agentic AI Complaint Assistant</span>
+  <h1>Every complaint deserves action, not just acknowledgement.</h1>
+  <p>One smart platform to understand citizen concerns, identify urgency, route cases to the right department and keep people informed until resolution.</p>
+  <div class="actions"><button class="btn primary" data-go="submit">＋ Register a complaint</button><button class="btn outline" data-go="track">Track an existing complaint →</button></div>
+ </div></div>
+ <div class="container">
+  <div class="stats">
+   <div class="stat"><span class="icon">📨</span><small>Total complaints</small><strong id="statTotal">0</strong></div>
+   <div class="stat"><span class="icon">⏳</span><small>Awaiting action</small><strong id="statPending">0</strong></div>
+   <div class="stat"><span class="icon">⚙️</span><small>In progress</small><strong id="statProgress">0</strong></div>
+   <div class="stat"><span class="icon">✅</span><small>Resolved</small><strong id="statResolved">0</strong></div>
+  </div>
+  <div class="section-head"><div><h2>How ResolveAI works</h2><p>A transparent workflow from first report to verified closure.</p></div></div>
+  <div class="grid3">
+   <article class="feature"><div class="emoji">🧠</div><h3>01 · Understand & classify</h3><p>Analyses the complaint text, identifies the issue type and estimates its urgency using a transparent demo rules engine.</p></article>
+   <article class="feature"><div class="emoji">🧭</div><h3>02 · Prioritise & route</h3><p>Recommends a priority, responsible department and next action so the right team can take ownership.</p></article>
+   <article class="feature"><div class="emoji">🔔</div><h3>03 · Track & close</h3><p>Maintains a timestamped status history and prepares a closure summary when an officer resolves the case.</p></article>
+  </div>
+  <div class="section-head"><div><h2>Built for accountable public service</h2><p>Key capabilities aligned with the AA-02 problem statement.</p></div></div>
+  <div class="grid3">
+   <article class="feature"><div class="emoji">🚦</div><h3>Priority intelligence</h3><p>Critical, High, Medium and Low levels help teams focus on urgent public-impact issues.</p></article>
+   <article class="feature"><div class="emoji">🏢</div><h3>Department routing</h3><p>Routes water, roads, sanitation, electricity and other issues to suggested teams.</p></article>
+   <article class="feature"><div class="emoji">🗺️</div><h3>Location-aware reports</h3><p>Optional GPS coordinates and photo evidence help officials identify the affected area.</p></article>
+  </div>
+  <div class="notice"><b>Prototype transparency:</b> Complaint analysis currently uses an explainable, keyword-based AI simulation in the browser. It demonstrates the agent workflow without requiring a paid AI API. A production LLM integration should run securely on a backend, not expose API keys in this HTML file.</div>
+ </div>
+</section>
+
+<section id="submit" class="page"><div class="container">
+ <div class="section-head"><div><h2>Register a new complaint</h2><p>Share the issue once. ResolveAI will prepare a classification and routing recommendation.</p></div></div>
+ <div class="panel">
+  <form id="complaintForm" class="form-grid">
+   <div class="field"><label for="citizenName">Full name *</label><input id="citizenName" required maxlength="80" placeholder="Your name"></div>
+   <div class="field"><label for="mobile">Mobile number *</label><input id="mobile" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number"></div>
+   <div class="field"><label for="category">Issue category (optional)</label><select id="category"><option value="">Let AI suggest category</option><option>Roads</option><option>Water Supply</option><option>Drainage</option><option>Streetlights</option><option>Sanitation</option><option>Waste Management</option><option>Electricity</option><option>Public Safety</option><option>Other</option></select><span class="hint">You can choose a category or let the assistant infer it.</span></div>
+   <div class="field"><label for="village">Village / ward *</label><input id="village" required maxlength="100" placeholder="Village, ward or locality"></div>
+   <div class="field full"><label for="location">Specific location / landmark *</label><input id="location" required maxlength="180" placeholder="Street, landmark, nearby school, bus stop..."></div>
+   <div class="field full"><label for="description">Describe the complaint *</label><textarea id="description" required minlength="10" maxlength="1500" placeholder="What happened? When did it start? Is anyone at risk? How many people are affected?"></textarea><span class="hint">Clear details help the assistant recommend a suitable priority and department.</span></div>
+   <div class="field full"><label for="photo">Photo evidence (optional)</label><div class="upload"><input id="photo" type="file" accept="image/*"><span class="hint">JPG, PNG or WebP. Maximum 5 MB before browser-side compression.</span><img id="photoPreview" class="preview hidden" alt="Complaint evidence preview"></div></div>
+   <div class="field full"><label>Location coordinates (optional)</label><div class="gps-row"><button class="btn soft" type="button" id="getGps">◎ Capture my GPS location</button><span id="gpsStatus" class="gps-status">No coordinates captured.</span></div><span class="hint">Your browser will ask permission. GPS works on HTTPS hosting or localhost.</span><input id="latitude" type="hidden"><input id="longitude" type="hidden"></div>
+   <div class="field full"><div id="aiPreview" class="ai-card hidden" aria-live="polite"><div class="ai-head">✨ ResolveAI analysis <span class="ai-chip">AUTO-ANALYSIS</span></div><div class="ai-grid"><div class="ai-value"><small>Category</small><b id="previewCategory">—</b></div><div class="ai-value"><small>Priority</small><b id="previewPriority">—</b></div><div class="ai-value"><small>Assigned team</small><b id="previewDepartment">—</b></div></div><p class="hint" id="previewReason"></p></div></div>
+   <div class="field full"><button class="btn primary" type="submit">Submit & analyse complaint →</button></div>
+  </form>
+  <div id="submitResult" class="result hidden" aria-live="polite"></div>
+ </div>
+</div></section>
+
+<section id="track" class="page"><div class="container">
+ <div class="section-head"><div><h2>Track your complaint</h2><p>Enter the reference ID you received after submission.</p></div></div>
+ <div class="panel"><form id="trackForm" class="toolbar"><input id="trackId" required placeholder="Example: GC-2026-123456"><button class="btn primary">Find complaint</button></form><div id="trackResult"></div></div>
+ <div class="section-head"><div><h2>Your recent submissions</h2><p>Records linked to this browser session.</p></div></div><div id="recentList" class="panel"></div>
+</div></section>
+
+<section id="admin" class="page"><div class="container">
+ <div class="section-head"><div><h2>Officer command centre</h2><p>Review incoming cases, validate AI recommendations and manage resolution.</p></div><button id="adminLogout" class="btn outline hidden">Log out</button></div>
+ <div id="adminLoginPanel" class="panel" style="max-width:520px"><h3>🔐 Official sign in</h3><p class="hint">Sign in using the administrator account configured in Firebase Authentication.</p><form id="adminLogin" class="form-grid"><div class="field full"><label for="adminUser">Admin email</label><input id="adminUser" type="email" required placeholder="Official email"></div><div class="field full"><label for="adminPass">Password</label><input id="adminPass" type="password" required placeholder="Password"></div><div class="field full"><button class="btn primary">Login as officer</button></div></form></div>
+ <div id="adminPanel" class="panel hidden">
+  <div class="kpi-row" style="margin-bottom:17px"><div class="metric"><small>Critical / high priority</small><b id="urgentCount">0</b></div><div class="metric"><small>Unassigned / pending</small><b id="unassignedCount">0</b></div><div class="metric"><small>Resolution rate</small><b id="resolutionRate">0%</b></div></div>
+  <div class="toolbar"><input id="adminSearch" placeholder="Search ID, citizen, village or issue"><select id="statusFilter"><option value="">All statuses</option><option>Pending</option><option>In Progress</option><option>Resolved</option><option>Rejected</option></select><select id="priorityFilter"><option value="">All priorities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select><select id="categoryFilter"><option value="">All categories</option><option>Roads</option><option>Water Supply</option><option>Drainage</option><option>Streetlights</option><option>Sanitation</option><option>Waste Management</option><option>Electricity</option><option>Public Safety</option><option>Other</option></select></div>
+  <div class="table-wrap"><table><thead><tr><th>Reference / date</th><th>Citizen</th><th>Issue / village</th><th>Priority</th><th>Department</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminRows"></tbody></table></div><div id="adminEmpty" class="empty hidden">No complaints match these filters.</div>
+  <div id="adminDetail" class="admin-detail hidden"></div>
+ </div>
+</div></section>
+</main>
+<footer class="footer"><div class="footer-inner"><div><b>🤖 ResolveAI</b><br><small>AI-Based Complaint Management & Resolution Assistant · AA-02</small></div><div><small>Prototype demonstration · Citizen-first · Transparent · Accountable</small></div></div></footer>
+<div id="toast" class="toast" role="status"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+// Existing GramConnect Firebase project configuration retained from your uploaded file.
+const firebaseConfig = {
+ apiKey:"AIzaSyAzsodzQMtWbbvxzZCOZaBBDH4NDA1gWX0",
+ authDomain:"gramconnect-village.firebaseapp.com",
+ projectId:"gramconnect-village",
+ storageBucket:"gramconnect-village.firebasestorage.app",
+ messagingSenderId:"360272461801",
+ appId:"1:360272461801:web:21fc99f46b67db31f0d578"
+};
+const ADMIN_UID = "DTs3vItsx2TnkKrhbeg4qgP7kOf1";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let currentUser=null,isAdmin=false,selectedPhotoData=null,authReadyResolve;
+const authReady=new Promise(resolve=>authReadyResolve=resolve);
+const $=id=>document.getElementById(id);
+const escapeHTML=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dateText=v=>{const d=v?.toDate?v.toDate():new Date(v);return isNaN(d)?"—":d.toLocaleString();};
+function toast(msg){const el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display="none",3800);}
+function showPage(name){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===name));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===name));if(name==="track")renderRecent();if(name==="admin"&&isAdmin)renderAdmin();window.scrollTo({top:0,behavior:"smooth"});}
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.go)));
+function makeId(){return "GC-"+new Date().getFullYear()+"-"+Math.floor(100000+Math.random()*900000);}
+async function ensureCitizen(){await authReady;if(!auth.currentUser)await signInAnonymously(auth);currentUser=auth.currentUser;}
+onAuthStateChanged(auth,user=>{currentUser=user;isAdmin=!!user&&user.uid===ADMIN_UID;authReadyResolve();if(isAdmin){$("adminLoginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");$("adminLogout").classList.remove("hidden");renderAdmin();}else{$("adminLoginPanel").classList.remove("hidden");$("adminPanel").classList.add("hidden");$("adminLogout").classList.add("hidden");}refreshStats();});
+async function getComplaints(){await authReady;if(!currentUser)return[];const q=isAdmin?collection(db,"complaints"):query(collection(db,"complaints"),where("createdBy","==",currentUser.uid));const snap=await getDocs(q);return snap.docs.map(d=>({docId:d.id,...d.data()})).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));}
+async function refreshStats(){try{const all=await getComplaints();$("statTotal").textContent=all.length;$("statPending").textContent=all.filter(x=>x.status==="Pending").length;$("statProgress").textContent=all.filter(x=>x.status==="In Progress").length;$("statResolved").textContent=all.filter(x=>x.status==="Resolved").length;}catch(e){console.error(e);}}
+const rules=[
+ {category:"Water Supply",terms:["water","tap","pipeline","pipe leak","drinking water","no supply","water shortage"],department:"Water Supply & Sanitation"},
+ {category:"Roads",terms:["road","pothole","street","footpath","bridge","road damage"],department:"Public Works / Roads"},
+ {category:"Drainage",terms:["drain","sewage","sewer","waterlogging","overflow","stagnant water"],department:"Drainage & Sewerage"},
+ {category:"Streetlights",terms:["streetlight","street light","lamp post","dark road","light not working"],department:"Electrical Maintenance"},
+ {category:"Electricity",terms:["electricity","power cut","power outage","transformer","electric wire","voltage"],department:"Electricity Department"},
+ {category:"Sanitation",terms:["garbage","dirty","cleaning","sanitation","waste","rubbish","dustbin"],department:"Sanitation & Health"},
+ {category:"Waste Management",terms:["waste collection","garbage collection","dumping","plastic waste","litter"],department:"Solid Waste Management"},
+ {category:"Public Safety",terms:["accident","danger","unsafe","open manhole","fire","injury","electric shock"],department:"Public Safety / Emergency"}
+];
+function analyseComplaint(description,chosenCategory=""){
+ const t=description.toLowerCase();
+ const matched=rules.find(r=>r.terms.some(term=>t.includes(term)));
+ let category=chosenCategory||matched?.category||"Other";
+ const rule=rules.find(r=>r.category===category);
+ const department=rule?.department||"General Grievance Cell";
+ const criticalTerms=["life threatening","life-threatening","injured","injury","fire","electric shock","collapsed","accident","open manhole","dangerous wire"];
+ const highTerms=["overflow","sewage","contaminated","no drinking water","waterlogging","school","hospital","elderly","children"];
+ let priority="Medium",reason="A service issue was identified. Standard review is recommended.";
+ if(criticalTerms.some(x=>t.includes(x))){priority="Critical";reason="Potential immediate safety risk detected. Escalate for urgent human review.";}
+ else if(highTerms.some(x=>t.includes(x))){priority="High";reason="The description suggests significant public-health or community impact.";}
+ else if(["minor","small issue","one light","occasionally","temporary"].some(x=>t.includes(x))){priority="Low";reason="The reported impact appears limited based on the submitted description.";}
+ else if(t.length<45){priority="Medium";reason="Limited details were provided. Officer should verify impact and urgency.";}
+ const actionMap={
+  "Water Supply":"Inspect the affected pipeline or supply point, verify the outage and arrange repair or alternate supply.",
+  "Roads":"Inspect the road condition, assess public risk and schedule repair or temporary barricading.",
+  "Drainage":"Inspect the drain, clear blockage and check for overflow or public-health hazards.",
+  "Streetlights":"Verify the pole or circuit and schedule electrical maintenance.",
+  "Electricity":"Inspect the electrical fault and isolate any immediate hazard before repair.",
+  "Sanitation":"Arrange site inspection, cleaning and safe waste removal.",
+  "Waste Management":"Verify collection records and schedule collection or disposal.",
+  "Public Safety":"Secure the affected area and immediately notify the responsible safety team.",
+  "Other":"Review the complaint, identify the responsible service and assign an officer."
+ };
+ return {category,priority,department,reason,suggestedAction:actionMap[category]||actionMap.Other,confidence:matched||chosenCategory?"Suggested from issue keywords":"Needs officer verification"};
+}
+function priorityPill(p){return `<span class="pill ${escapeHTML(p)}">${escapeHTML(p||"Medium")}</span>`;}
+function statusPill(s){return `<span class="pill ${String(s).replace(" ","")}">${escapeHTML(s||"Pending")}</span>`;}
+function livePreview(){const d=$("description").value.trim();if(d.length<10){$("aiPreview").classList.add("hidden");return;}const a=analyseComplaint(d,$("category").value);$("aiPreview").classList.remove("hidden");$("previewCategory").textContent=a.category;$("previewPriority").textContent=a.priority;$("previewDepartment").textContent=a.department;$("previewReason").textContent=a.reason+" "+a.confidence+"."; }
+$("description").addEventListener("input",livePreview);$("category").addEventListener("change",livePreview);
+function compressImage(dataUrl){return new Promise((resolve,reject)=>{if(!dataUrl)return resolve("");const img=new Image();img.onload=()=>{const max=720,scale=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext("2d").drawImage(img,0,0,c.width,c.height);let q=.65,out=c.toDataURL("image/jpeg",q);while(out.length>420000&&q>.3){q-=.08;out=c.toDataURL("image/jpeg",q);}out.length>420000?reject(new Error("Image is too large after compression.")):resolve(out);};img.onerror=()=>reject(new Error("Could not process image."));img.src=dataUrl;});}
+$("photo").addEventListener("change",e=>{const f=e.target.files?.[0];selectedPhotoData=null;$("photoPreview").classList.add("hidden");if(!f)return;if(!f.type.startsWith("image/")){toast("Choose an image file.");e.target.value="";return;}if(f.size>5*1024*1024){toast("Choose an image smaller than 5 MB.");e.target.value="";return;}const r=new FileReader();r.onload=()=>{selectedPhotoData=r.result;$("photoPreview").src=selectedPhotoData;$("photoPreview").classList.remove("hidden");};r.readAsDataURL(f);});
+$("getGps").addEventListener("click",()=>{if(!navigator.geolocation){toast("Geolocation is not supported.");return;}const b=$("getGps");b.disabled=true;b.textContent="Getting location…";$("gpsStatus").textContent="Waiting for permission…";navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lon=pos.coords.longitude;$("latitude").value=lat;$("longitude").value=lon;$("gpsStatus").textContent=`Captured ${lat.toFixed(6)}, ${lon.toFixed(6)} · accuracy ±${Math.round(pos.coords.accuracy)} m`;$("gpsStatus").style.color="var(--teal)";b.disabled=false;b.textContent="✓ Location captured";},err=>{const m=err.code===1?"Permission denied. Allow location in browser settings.":err.code===2?"Location unavailable.":"Location request timed out."; $("gpsStatus").textContent=m;b.disabled=false;b.textContent="Try GPS again";toast(m);},{enableHighAccuracy:true,timeout:15000,maximumAge:0});});
+$("complaintForm").addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;btn.textContent="Analysing & submitting…";try{await ensureCitizen();const photoData=await compressImage(selectedPhotoData),now=new Date().toISOString(),analysis=analyseComplaint($("description").value.trim(),$("category").value);const item={id:makeId(),name:$("citizenName").value.trim(),mobile:$("mobile").value.trim(),category:analysis.category,priority:analysis.priority,department:analysis.department,aiReason:analysis.reason,aiConfidence:analysis.confidence,suggestedAction:analysis.suggestedAction,village:$("village").value.trim(),location:$("location").value.trim(),description:$("description").value.trim(),photoData,photoName:$("photo").files?.[0]?.name||"",latitude:$("latitude").value?Number($("latitude").value):null,longitude:$("longitude").value?Number($("longitude").value):null,status:"Pending",assignedTo:analysis.department,createdAt:now,updatedAt:now,createdBy:currentUser.uid,updates:[{status:"Pending",note:"Complaint received. AI assistant classified the issue and recommended a department and priority.",at:now}],closureSummary:""};await addDoc(collection(db,"complaints"),item);refreshStats();$("submitResult").classList.remove("hidden");$("submitResult").innerHTML=`<b style="color:var(--teal)">✓ Complaint registered successfully</b><p>Your reference ID</p><h2 style="color:var(--blue);margin:0">${escapeHTML(item.id)}</h2><div class="ai-grid"><div class="ai-value"><small>Category</small><b>${escapeHTML(item.category)}</b></div><div class="ai-value"><small>Priority</small><b>${escapeHTML(item.priority)}</b></div><div class="ai-value"><small>Suggested team</small><b>${escapeHTML(item.department)}</b></div></div><p class="hint">${escapeHTML(item.aiReason)} Save your reference ID to track this complaint from this browser.</p><button class="btn soft" type="button" id="copyId">Copy reference ID</button> <button class="btn primary" type="button" id="trackNew">Track complaint</button>`;$("copyId").onclick=()=>copyText(item.id);$("trackNew").onclick=()=>openTracking(item.id);$("complaintForm").reset();selectedPhotoData=null;$("photoPreview").classList.add("hidden");$("aiPreview").classList.add("hidden");$("gpsStatus").textContent="No coordinates captured.";$("getGps").textContent="◎ Capture my GPS location";toast("Complaint submitted and analysed.");}catch(err){console.error(err);toast(err.code==="permission-denied"?"Firebase denied the request. Check Firestore rules and anonymous sign-in.":err.message||"Could not submit complaint.");}finally{btn.disabled=false;btn.textContent="Submit & analyse complaint →";}});
+function copyText(t){if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(()=>toast("Reference ID copied!")).catch(()=>toast("Copy this ID: "+t));else toast("Reference ID: "+t);}
+async function openTracking(id){$("trackId").value=id;showPage("track");await lookupComplaint(id);}
+$("trackForm").addEventListener("submit",async e=>{e.preventDefault();await lookupComplaint($("trackId").value.trim());});
+async function lookupComplaint(id){const box=$("trackResult");try{const item=(await getComplaints()).find(x=>x.id?.toLowerCase()===id.toLowerCase());if(!item){box.innerHTML='<div class="result">No matching complaint was found in this browser session. Citizen tracking is currently linked to the anonymous browser session used at submission.</div>';return;}box.innerHTML=trackingHTML(item);}catch(e){console.error(e);box.innerHTML='<div class="result">Unable to load this complaint. Check your connection and Firebase rules.</div>';}}
+function trackingHTML(x){return `<div class="result"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="hint">REFERENCE ID</span><h3 style="margin:2px 0;color:var(--navy)">${escapeHTML(x.id)}</h3></div>${statusPill(x.status)}</div><div class="ai-grid"><div class="ai-value"><small>Priority</small><b>${escapeHTML(x.priority||"—")}</b></div><div class="ai-value"><small>Department</small><b>${escapeHTML(x.department||"—")}</b></div><div class="ai-value"><small>Category</small><b>${escapeHTML(x.category)}</b></div></div><p><b>Location:</b> ${escapeHTML(x.village)} · ${escapeHTML(x.location)}</p><p><b>Complaint:</b> ${escapeHTML(x.description)}</p><p class="hint">Submitted: ${dateText(x.createdAt)} · Last updated: ${dateText(x.updatedAt)}</p><h4>Progress timeline</h4><div class="timeline">${(x.updates||[]).map(u=>`<div class="event"><span class="dot"></span><div><p><b>${escapeHTML(u.status)}</b> — ${escapeHTML(u.note)}</p><small>${dateText(u.at)}</small></div></div>`).join("")}</div>${x.status==="Resolved"&&x.closureSummary?`<div class="notice"><b>Resolution summary</b><br>${escapeHTML(x.closureSummary)}</div>`:""}</div>`;}
+async function renderRecent(){try{const all=(await getComplaints()).slice(0,5);$("recentList").innerHTML=all.length?all.map(x=>`<div class="result"><b>${escapeHTML(x.id)}</b> · ${escapeHTML(x.category)} · ${statusPill(x.status)}<p class="hint">${escapeHTML(x.village)} · ${dateText(x.createdAt)}</p><button class="btn soft" data-track-id="${escapeHTML(x.id)}">View tracking</button></div>`).join(""):'<div class="empty">No complaints submitted from this browser yet.</div>';document.querySelectorAll("[data-track-id]").forEach(b=>b.addEventListener("click",()=>openTracking(b.dataset.trackId)));}catch(e){console.error(e);}}
+$("adminLogin").addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter;btn.disabled=true;try{const c=await signInWithEmailAndPassword(auth,$("adminUser").value.trim(),$("adminPass").value);if(c.user.uid!==ADMIN_UID){await signOut(auth);throw new Error("This account is not the configured administrator.");}isAdmin=true;$("adminLoginPanel").classList.add("hidden");$("adminPanel").classList.remove("hidden");$("adminLogout").classList.remove("hidden");await renderAdmin();toast("Officer login successful.");}catch(err){console.error(err);toast(err.code==="auth/invalid-credential"?"Incorrect email or password.":err.message||"Login failed.");}finally{btn.disabled=false;}});
+$("adminLogout").addEventListener("click",async()=>{await signOut(auth);try{await signInAnonymously(auth);}catch(e){console.error(e);}isAdmin=false;$("adminLoginPanel").classList.remove("hidden");$("adminPanel").classList.add("hidden");$("adminLogout").classList.add("hidden");$("adminPass").value="";});
+["adminSearch","statusFilter","priorityFilter","categoryFilter"].forEach(id=>$(id).addEventListener(id==="adminSearch"?"input":"change",renderAdmin));
+async function renderAdmin(){if(!isAdmin)return;try{const qv=$("adminSearch").value.toLowerCase(),st=$("statusFilter").value,pr=$("priorityFilter").value,cat=$("categoryFilter").value;const all=await getComplaints();const filtered=all.filter(x=>(!qv||[x.id,x.name,x.village,x.location,x.mobile,x.description].join(" ").toLowerCase().includes(qv))&&(!st||x.status===st)&&(!pr||x.priority===pr)&&(!cat||x.category===cat));$("urgentCount").textContent=all.filter(x=>["Critical","High"].includes(x.priority)&&x.status!=="Resolved").length;$("unassignedCount").textContent=all.filter(x=>x.status==="Pending").length;$("resolutionRate").textContent=(all.length?Math.round(all.filter(x=>x.status==="Resolved").length/all.length*100):0)+"%";$("adminRows").innerHTML=filtered.map(x=>`<tr><td><b>${escapeHTML(x.id)}</b><br><span class="hint">${new Date(x.createdAt).toLocaleDateString()}</span></td><td>${escapeHTML(x.name)}</td><td>${escapeHTML(x.category)}<br><span class="hint">${escapeHTML(x.village)}</span></td><td>${priorityPill(x.priority)}</td><td>${escapeHTML(x.department||"—")}</td><td>${statusPill(x.status)}</td><td><button class="btn primary" style="padding:8px 10px;font-size:11px" data-view-id="${escapeHTML(x.docId)}">Review case</button></td></tr>`).join("");$("adminEmpty").classList.toggle("hidden",filtered.length!==0);document.querySelectorAll("[data-view-id]").forEach(b=>b.addEventListener("click",()=>showAdminDetail(b.dataset.viewId)));}catch(e){console.error(e);toast("Could not load complaints. Check Firestore rules.");}}
+async function showAdminDetail(docId){if(!isAdmin)return;try{const x=(await getComplaints()).find(v=>v.docId===docId);if(!x)return;const box=$("adminDetail"),gps=Number.isFinite(x.latitude)&&Number.isFinite(x.longitude),map=gps?`https://www.google.com/maps?q=${encodeURIComponent(x.latitude+","+x.longitude)}`:"";box.classList.remove("hidden");box.innerHTML=`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><div><span class="hint">CASE REVIEW</span><h3 style="margin:2px 0">${escapeHTML(x.id)}</h3></div><button class="btn outline" id="closeDetail">Close</button></div><div class="detail-grid"><div>${x.photoData?`<img class="admin-photo" src="${x.photoData}" alt="Complaint evidence">`:'<div class="empty">No photo evidence attached.</div>'}<div class="detail-meta"><b>Citizen contact</b><br>${escapeHTML(x.name)} · ${escapeHTML(x.mobile)}</div><div class="detail-meta"><b>Reported issue</b><br>${escapeHTML(x.description)}</div><div class="detail-meta"><b>Reported location</b><br>${escapeHTML(x.village)} · ${escapeHTML(x.location)}<br>${gps?`<a href="${map}" target="_blank" rel="noopener">Open GPS location in Maps ↗</a><br><span class="hint">${x.latitude.toFixed(6)}, ${x.longitude.toFixed(6)}</span>`:"No GPS coordinates supplied."}</div></div><div><div class="ai-card"><div class="ai-head">✨ Assistant recommendation <span class="ai-chip">REVIEW REQUIRED</span></div><div class="ai-grid"><div class="ai-value"><small>Category</small><b>${escapeHTML(x.category)}</b></div><div class="ai-value"><small>Priority</small><b>${escapeHTML(x.priority||"—")}</b></div><div class="ai-value"><small>Suggested team</small><b>${escapeHTML(x.department||"—")}</b></div></div><p class="hint">${escapeHTML(x.aiReason||"No automated analysis saved.")}</p><p><b>Suggested next action:</b><br>${escapeHTML(x.suggestedAction||"Review and assign to the responsible team.")}</p></div><div class="detail-meta"><b>Submitted</b><br>${dateText(x.createdAt)}</div><div class="detail-meta"><label for="detailDepartment">Assigned department / team</label><input id="detailDepartment" value="${escapeHTML(x.assignedTo||x.department||"")}" maxlength="100"><label for="detailStatus" style="display:block;margin-top:12px">Update case status</label><select id="detailStatus"><option ${x.status==="Pending"?"selected":""}>Pending</option><option ${x.status==="In Progress"?"selected":""}>In Progress</option><option ${x.status==="Resolved"?"selected":""}>Resolved</option><option ${x.status==="Rejected"?"selected":""}>Rejected</option></select><label for="detailNote" style="display:block;margin-top:12px">Update for citizen</label><textarea id="detailNote" placeholder="Explain what action has been taken..."></textarea><label for="closureNote" style="display:block;margin-top:12px">Closure summary (required when resolving)</label><textarea id="closureNote" placeholder="${x.status==="Resolved"?"Edit the resolution summary...":"Describe the action completed and outcome..."}">${escapeHTML(x.closureSummary||"")}</textarea><button class="btn success" id="saveCase" style="margin-top:12px;width:100%">Save case update</button></div></div></div>`;$("closeDetail").onclick=()=>box.classList.add("hidden");$("saveCase").onclick=()=>saveCase(docId);box.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){console.error(e);toast("Could not open case details.");}}
+async function saveCase(docId){if(!isAdmin)return;try{const x=(await getComplaints()).find(v=>v.docId===docId);if(!x)return;const status=$("detailStatus").value,department=$("detailDepartment").value.trim()||x.department||"General Grievance Cell",closure=$("closureNote").value.trim(),note=$("detailNote").value.trim()||(status==="Resolved"?"Complaint marked resolved by the officer.":"Case updated by the responsible officer.");if(status==="Resolved"&&!closure){toast("Please enter a closure summary before resolving.");return;}const at=new Date().toISOString(),updates=[...(x.updates||[]),{status,note,at}];await updateDoc(doc(db,"complaints",docId),{status,department,assignedTo:department,updatedAt:at,updates,closureSummary:status==="Resolved"?closure:(x.closureSummary||"")});await renderAdmin();await refreshStats();await showAdminDetail(docId);toast("Case update saved successfully.");}catch(e){console.error(e);toast("Could not save update. Check administrator permissions.");}}
+window.copyText=copyText;window.openTracking=openTracking;refreshStats();
+</script>
+</body>
+</html>
